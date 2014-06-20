@@ -19,7 +19,7 @@
 from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
                        url(r'^$', 'rrdviewer.views.list_graphs', name="rrd_home"),
-                       url(r'^graph(?P<start_time>\d+?)/(?P<end_time>\d+?)/(?P<path>.+?)\.rrd$', 'rrdviewer.views.get_graph', name="get_graph"),
+                       url(r'^graph(?P<start_time>.+?)/(?P<end_time>.+?)/(?P<path>.+?)\.rrd$', 'rrdviewer.views.get_graph', name="get_graph"),
                        url(r'^info/(?P<path>.+?)\.rrd$', 'rrdviewer.views.get_info', name="get_info"),
                        url(r'^rrd/(?P<path>.+?)\.rrd$', 'rrdviewer.views.show_rrd', name="rrd_view"),
                        )

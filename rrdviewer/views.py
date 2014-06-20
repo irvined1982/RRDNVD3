@@ -19,15 +19,35 @@
 import json
 import os
 import rrdtool
-
+from django.http import Http404
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
+from django.http import HttpResponse
 
 GRAPH_PATH='/tmp'
 
-def get_graph(request, start_time, end_time, path):
-    pass
+def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
+    filename=os.path.join(GRAPH_PATH, path)
+    if not os.path.exists(filename):
+        raise Http404("RRD does not exist")
+
+    args=[]
+    if start_time != 0:
+        args.append("-s")
+        args.append("%s" % start_time)
+
+    if end_time != 0:
+        args.append("-e")
+        args.append("%s" % end_time)
+
+    data = rrdtool.fetch(
+        CF,
+        filename,
+        *args
+    )
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 def get_info(request, path):
     pass
