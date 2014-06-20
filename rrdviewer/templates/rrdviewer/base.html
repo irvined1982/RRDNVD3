@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+	<link rel="stylesheet" href="{% static "rrdviewer/bootstrap/dist/css/bootstrap.min.css" %}">
+	<link rel="stylesheet" href="{% static "rrdviewer/bootstrap/dist/css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" href="{% static "rrdviewer/nvd3/nv.d3.css" %}">
+	<script src="{% static "rrdviewer/jquery/jquery.js" %}"></script>
+	<script src="{% static "rrdviewer/d3/d3.js" %}"></script>
+	<script src="{% static "rrdviewer/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "rrdviewer/nvd3/nv.d3.js" %}"></script>
+
+  </head>
+  <body>
+	  <nav class="navbar navbar-default" role="navigation">
+	  <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			  <span class="sr-only">Toggle navigation</span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="{% url "olw_system_view" %}">Openlava</a>
+	  </div>
+       <div class="collapse navbar-collapse">
+		   <ul class="nav navbar-nav">
+			   <li><a href="{% url "rrd_home" %}">RRD List</a></li>
+		   </ul>
+	   </div>
+	   </nav>
+	<div class="container">
+	{% block content %}{% endblock %}
+	</div>
+  </body>
+</html>

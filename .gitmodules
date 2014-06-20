@@ -1,0 +1,12 @@
+[submodule "rrdviewer/static/rrdviewer/bootstrap"]
+	path = rrdviewer/static/rrdviewer/bootstrap
+	url = https://github.com/twbs/bootstrap.git
+[submodule "rrdviewer/static/rrdviewer/nvd3"]
+	path = rrdviewer/static/rrdviewer/nvd3
+	url = https://github.com/novus/nvd3.git
+[submodule "rrdviewer/static/rrdviewer/jquery"]
+	path = rrdviewer/static/rrdviewer/jquery
+	url = https://github.com/jquery/jquery.git
+[submodule "rrdviewer/static/rrdviewer/d3"]
+	path = rrdviewer/static/rrdviewer/d3
+	url = https://github.com/mbostock/d3.git
