@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 setup(
-		name='django-openlavaweb',
+		name='rrdviewer',
 		version='1.0',
 		packages=['rrdviewer'],
 		include_package_data=True,	

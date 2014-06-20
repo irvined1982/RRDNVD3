@@ -1,10 +1,7 @@
-{% extends "openlavaweb/base.html" %}
+{% extends "rrdviewer/base.html" %}
 {% block content %}
-<h1>{{ cluster.name }}</h1>
-<dl class="dl-horizontal">
-	<dt>Cluster Name:</dt><dd>{{ cluster.name }}</dd>
-	<dt>Master Host:</dt><dd>{{ cluster.master.name }}</dd>
-</dl>
-<h1>Resources</h1>
-{% include "openlavaweb/widgets/resource_list.html" with resource_list=cluster.resources%}
+{% for graph in graphs %}
+<h3>{{ graph.name }}</h2>
+
+{% endfor %}
 {% endblock %}

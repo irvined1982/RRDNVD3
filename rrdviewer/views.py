@@ -22,6 +22,7 @@ import rrdtool
 
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
+from django.template import RequestContext, loader
 
 GRAPH_PATH='/tmp'
 
@@ -30,6 +31,9 @@ def get_graph(request, start_time, end_time, path):
 
 def get_info(request, path):
     pass
+
+def show_rrd(request):
+	pass
 
 def list_graphs(request):
     graphs = []
@@ -45,8 +49,9 @@ def list_graphs(request):
                 info['relative_path'] = info['rrd_absolute_path']
                 if info['relative_path'].startswith(GRAPH_PATH):
                     info['relative_path'] = info['relative_path'][len(GRAPH_PATH):]
-                info['rrd_url'] = reverse('rrd_home', args=(info['relative_path']))
-                for k,v in rrdtool.info(info['rrd_absolute_path']):
+                info['rrd_url'] = reverse('rrd_view', args=[info['relative_path']])
+                info['name']=info['relative_path'][:-3]
+                for k,v in rrdtool.info(info['rrd_absolute_path']).iteritems():
                     components=k.split(".")
                     if len(components) == 1:
                         info[components[0]]=v
@@ -71,4 +76,4 @@ def list_graphs(request):
                                 i[key][tindex]={}
                             i[key][tindex][components[2]]=v
                 graphs.append(info)
-    return render_to_response(request, "graph_list.html", {'graphs':graphs,})
+    return render_to_response("rrdviewer/graph_list.html", {'graphs':graphs,}, context_instance=RequestContext(request))
