@@ -1,8 +1,50 @@
 {% extends "rrdviewer/base.html" %}
 {% block content %}
+        <script>
+            function update_chart(chart, selector, url){
+                var jqxhr = $.getJSON( url, function(data) {
+                    d3.select(selector)
+	                .datum(data)
+        	        .transition().duration(500)
+	                .call(chart);
+        	    }).always(function() {
+	                setTimeout(function(){
+	                    update_chart(chart, selector, url);
+        	        }, 30000);
+	            });
+            }
+
+
+        </script>
 {% for graph in graphs %}
-<h3>{{ graph.name }}</h2>
+<h3>{{ graph.name }}</h3>
 <a href='{{graph.rrd_url}}'>{{graph.name}}</a>
+
+<div id="{{graph.relative_path}}">
+  <svg></svg>
+</div>
+<script>
+    nv.addGraph(function() {
+        var chart = nv.models.stackedAreaChart()
+            .x(function(d) { return d[0] })
+            .y(function(d) { return d[1] })
+            .clipEdge(true)
+            .useInteractiveGuideline(true)
+            ;
+
+        chart.xAxis
+            .showMaxMin(false)
+            .tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+
+        chart.yAxis
+            .tickFormat(d3.format(',.2f'));
+
+        nv.utils.windowResize(chart.update);
+
+        update_chart(chart, {{graph.relative_path}}, {{ graph.rrd_url }} );
+
+    });
+</script>
 
 {% endfor %}
 {% endblock %}

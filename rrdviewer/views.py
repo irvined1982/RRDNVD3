@@ -65,10 +65,10 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
             'values': [],
         })
 
-    print len(serieses)
+    # Broken for multiple serieses in same RRD, need to understand dataformat more.
     for row in data[2:][0]:
         for series_index in xrange(len(row)):
-            serieses[series_index]['values'].append([time,row[series_index]])
+            serieses[series_index]['values'].append([time * 1000, row[series_index]])
         time += step_time
 
     return HttpResponse(json.dumps(serieses), content_type="application/json")
