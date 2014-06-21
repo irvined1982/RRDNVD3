@@ -57,6 +57,8 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
     time = header[0]
     step_time = header[2]
     print data
+
+
     serieses = []
     for series in data[1]:
         serieses.append({
