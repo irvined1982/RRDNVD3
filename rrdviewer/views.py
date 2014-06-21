@@ -58,11 +58,11 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
     step_time = header[2]
 
     serieses = []
-    for i in xrange(len(data[1])):
-        serieses[i] = {
-            'key': data[1][i],
+    for series in data[1]:
+        serieses.append({
+            'key': series,
             'values': [],
-        }
+        })
 
     for row in data[2:]:
         for i in xrange(len(row)):
