@@ -25,17 +25,20 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
 from django.http import HttpResponse
 
-GRAPH_PATH='/tmp'
+GRAPH_PATH = '/tmp'
+
 
 def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
-    path=path.lstrip("/")
-    path=path.split('/')
-    filename=os.path.join(GRAPH_PATH, *path)
-    if not os.path.exists(filename):
-        print filename
-        raise Http404("RRD does not exist")
+    start_time=int(start_time)
+    end_time=int(end_time)
 
-    args=[]
+    path = path.lstrip("/")
+    path = path.split('/')
+
+    filename = os.path.join(GRAPH_PATH, *path)
+    if not os.path.exists(filename):
+        raise Http404("RRD does not exist")
+    args = []
     if start_time != 0:
         args.append("-s")
         args.append(str("%s" % start_time))
@@ -52,51 +55,54 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
 
     return HttpResponse(json.dumps(data), content_type="application/json")
 
+
 def get_info(request, path):
     pass
 
+
 def show_rrd(request, path):
-	pass
+    pass
+
 
 def list_graphs(request):
     graphs = []
     for directory, subdirs, files in os.walk(GRAPH_PATH):
         for file in files:
             if file.endswith(".rrd"):
-                info={}
-                info_file="%s.info" % file[0:-4]
+                info = {}
+                info_file = "%s.info" % file[0:-4]
                 info_file_path = (os.path.join(directory, info_file))
                 if os.path.exists(info_file_path):
-                    info=json.load(open(info_file_path))
-                info['rrd_absolute_path'] = os.path.join(directory,file)
+                    info = json.load(open(info_file_path))
+                info['rrd_absolute_path'] = os.path.join(directory, file)
                 info['relative_path'] = info['rrd_absolute_path']
                 if info['relative_path'].startswith(GRAPH_PATH):
                     info['relative_path'] = info['relative_path'][len(GRAPH_PATH):]
-                info['rrd_url'] = reverse('get_graph', args=[0,0,info['relative_path']])
-                info['name']=info['relative_path'][:-4]
-                for k,v in rrdtool.info(info['rrd_absolute_path']).iteritems():
-                    components=k.split(".")
+                info['rrd_url'] = reverse('get_graph', args=[0, 0, info['relative_path']])
+                info['name'] = info['relative_path'][:-4]
+                for k, v in rrdtool.info(info['rrd_absolute_path']).iteritems():
+                    components = k.split(".")
                     if len(components) == 1:
-                        info[components[0]]=v
+                        info[components[0]] = v
                     else:
-                        key=components[0]
-                        key,t,index=key.partition("[")
-                        index=index.rstrip("]")
+                        key = components[0]
+                        key, t, index = key.partition("[")
+                        index = index.rstrip("]")
                         if key not in info:
-                            info[key]={}
+                            info[key] = {}
                         if index not in info[key]:
-                            info[key][index]={}
-                        if len(components)==2:
-                            info[key][index][components[1]]=v
-                        elif len(components)==3:
-                            i=info[key][index] # dict of third level entries
-                            tkey=components[1]
-                            tkey,t,tindex=key.partition("[")
-                            tindex=index.rstrip("]")
+                            info[key][index] = {}
+                        if len(components) == 2:
+                            info[key][index][components[1]] = v
+                        elif len(components) == 3:
+                            i = info[key][index]  # dict of third level entries
+                            tkey, t, tindex = components[1].partition("[")
+                            tindex = index.rstrip("]")
                             if tkey not in i:
-                                i[tkey]={}
+                                i[tkey] = {}
                             if tindex not in i[key]:
-                                i[key][tindex]={}
-                            i[key][tindex][components[2]]=v
+                                i[key][tindex] = {}
+                            i[key][tindex][components[2]] = v
                 graphs.append(info)
-    return render_to_response("rrdviewer/graph_list.html", {'graphs':graphs,}, context_instance=RequestContext(request))
+    return render_to_response("rrdviewer/graph_list.html", {'graphs': graphs, },
+                              context_instance=RequestContext(request))
