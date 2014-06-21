@@ -6,7 +6,8 @@
                     d3.select(selector)
 	                .datum(data)
         	        .transition().duration(500)
-	                .call(chart);
+	                .call(chart).style({ 'width': 400, 'height': 200 });
+
         	    }).always(function() {
 	                setTimeout(function(){
 	                    update_chart(chart, selector, url);
