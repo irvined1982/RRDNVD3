@@ -89,6 +89,8 @@ def list_graphs(request):
         for file in files:
             if file.endswith(".rrd"):
                 id += 1
+                if id > 10:
+                    continue
                 info = {}
                 info_file = "%s.info" % file[0:-4]
                 info_file_path = (os.path.join(directory, info_file))
