@@ -118,8 +118,8 @@ def list_graphs(request):
                             tindex = index.rstrip("]")
                             if tkey not in i:
                                 i[tkey] = {}
-                            if tindex not in i[key]:
-                                i[key][tindex] = {}
+                            if tindex not in i[tkey]:
+                                i[tkey][tindex] = {}
                             i[key][tindex][components[2]] = v
                 graphs.append(info)
     return render_to_response("rrdviewer/graph_list.html", {'graphs': graphs, },
