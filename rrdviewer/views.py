@@ -89,7 +89,7 @@ def list_graphs(request):
         for file in files:
             if file.endswith(".rrd"):
                 id += 1
-                if id > 10:
+                if id > 2:
                     continue
                 info = {}
                 info_file = "%s.info" % file[0:-4]
