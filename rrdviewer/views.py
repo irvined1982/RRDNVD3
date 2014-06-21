@@ -66,9 +66,13 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
             'values': [],
         })
 
+    print len(serieses)
     for row in data[2:]:
+        print len(row)
         for series_index in xrange(len(row)):
-            serieses[series_index]['values'].append([time,row[series_index]])
+            print
+            v=row[series_index]
+            serieses[series_index]['values'].append([time,v])
 
         time += step_time
 
