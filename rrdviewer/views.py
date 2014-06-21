@@ -29,8 +29,8 @@ GRAPH_PATH = '/tmp'
 
 
 def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
-    start_time=int(start_time)
-    end_time=int(end_time)
+    start_time = int(start_time)
+    end_time = int(end_time)
 
     path = path.lstrip("/")
     path = path.split('/')
@@ -53,7 +53,24 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
         *args
     )
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    header = data.pop(0)
+    time = header[0]
+    serieses = []
+
+    for series in data.pop(0):
+        serieses[series] = {
+            'key': series,
+            'values': [],
+        }
+
+    step_time = header[2]
+
+    for row in data:
+        for i in xrange(len(row)):
+            serieses[i]['values'].append([time, row[i]])
+        time += step_time
+        
+    return HttpResponse(json.dumps([serieses]), content_type="application/json")
 
 
 def get_info(request, path):
