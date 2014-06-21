@@ -53,23 +53,22 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
         *args
     )
 
-    header = data.pop(0)
+    header = data[0]
     time = header[0]
-    serieses = []
+    step_time = header[2]
 
-    for series in data.pop(0):
+    serieses = []
+    for series in data[1]:
         serieses[series] = {
             'key': series,
             'values': [],
         }
 
-    step_time = header[2]
-
-    for row in data:
+    for row in data[2:]:
         for i in xrange(len(row)):
             serieses[i]['values'].append([time, row[i]])
         time += step_time
-        
+
     return HttpResponse(json.dumps([serieses]), content_type="application/json")
 
 
