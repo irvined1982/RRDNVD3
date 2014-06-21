@@ -56,7 +56,7 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
     header = data[0]
     time = header[0]
     step_time = header[2]
-
+    print data
     serieses = []
     for series in data[1]:
         serieses.append({
@@ -64,14 +64,13 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
             'values': [],
         })
 
-    for row in data[2:]:
-        for i in xrange(len(row)):
-            print i
+    for time_point in data[2:]:
+        for series_index in len(time_point):
+            serieses[series_index]['values'].append([time,time_point[series_index]])
 
-            #serieses[i]['values'].append([time, row[i]])
         time += step_time
 
-    return HttpResponse(json.dumps([serieses]), content_type="application/json")
+    return HttpResponse(json.dumps(serieses), content_type="application/json")
 
 
 def get_info(request, path):
