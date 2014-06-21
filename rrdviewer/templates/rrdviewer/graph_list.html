@@ -13,14 +13,12 @@
         	        }, 30000);
 	            });
             }
-
-
         </script>
 {% for graph in graphs %}
 <h3>{{ graph.name }}</h3>
 <a href='{{graph.rrd_url}}'>{{graph.name}}</a>
 
-<div id="{{graph.relative_path}}">
+<div id="{{graph.id}}">
   <svg width="500px" height="300px"></svg>
 </div>
 <script>
@@ -41,7 +39,7 @@
 
         nv.utils.windowResize(chart.update);
 
-        update_chart(chart, "{{graph.relative_path}}", "{{ graph.rrd_url }}" );
+        update_chart(chart, "{{graph.id}}", "{{ graph.rrd_url }}" );
 
     });
 </script>

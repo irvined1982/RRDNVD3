@@ -83,10 +83,12 @@ def show_rrd(request, path):
 
 
 def list_graphs(request):
+    id=0
     graphs = []
     for directory, subdirs, files in os.walk(GRAPH_PATH):
         for file in files:
             if file.endswith(".rrd"):
+                id += 1
                 info = {}
                 info_file = "%s.info" % file[0:-4]
                 info_file_path = (os.path.join(directory, info_file))
@@ -94,6 +96,7 @@ def list_graphs(request):
                     info = json.load(open(info_file_path))
                 info['rrd_absolute_path'] = os.path.join(directory, file)
                 info['relative_path'] = info['rrd_absolute_path']
+                info['graph_id'] = "graph_%s" % id
                 if info['relative_path'].startswith(GRAPH_PATH):
                     info['relative_path'] = info['relative_path'][len(GRAPH_PATH):]
                 info['rrd_url'] = reverse('get_graph', args=[0, 0, info['relative_path']])
