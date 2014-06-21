@@ -2,6 +2,7 @@
 {% block content %}
 {% for graph in graphs %}
 <h3>{{ graph.name }}</h2>
+<a href='{{graph.rrd_url}}'>{{graph.name}}</a>
 
 {% endfor %}
 {% endblock %}

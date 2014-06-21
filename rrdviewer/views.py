@@ -28,22 +28,25 @@ from django.http import HttpResponse
 GRAPH_PATH='/tmp'
 
 def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
-    filename=os.path.join(GRAPH_PATH, path)
+    path=path.lstrip("/")
+    path=path.split('/')
+    filename=os.path.join(GRAPH_PATH, *path)
     if not os.path.exists(filename):
+        print filename
         raise Http404("RRD does not exist")
 
     args=[]
     if start_time != 0:
         args.append("-s")
-        args.append("%s" % start_time)
+        args.append(str("%s" % start_time))
 
     if end_time != 0:
         args.append("-e")
-        args.append("%s" % end_time)
+        args.append(str("%s" % end_time))
 
     data = rrdtool.fetch(
-        CF,
-        filename,
+        str(filename),
+        str(CF),
         *args
     )
 
@@ -52,7 +55,7 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
 def get_info(request, path):
     pass
 
-def show_rrd(request):
+def show_rrd(request, path):
 	pass
 
 def list_graphs(request):
@@ -69,8 +72,8 @@ def list_graphs(request):
                 info['relative_path'] = info['rrd_absolute_path']
                 if info['relative_path'].startswith(GRAPH_PATH):
                     info['relative_path'] = info['relative_path'][len(GRAPH_PATH):]
-                info['rrd_url'] = reverse('rrd_view', args=[info['relative_path']])
-                info['name']=info['relative_path'][:-3]
+                info['rrd_url'] = reverse('get_graph', args=[0,0,info['relative_path']])
+                info['name']=info['relative_path'][:-4]
                 for k,v in rrdtool.info(info['rrd_absolute_path']).iteritems():
                     components=k.split(".")
                     if len(components) == 1:
