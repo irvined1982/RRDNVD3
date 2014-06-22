@@ -49,6 +49,18 @@
                 });
             }
 
+        function set_active_chart(selector, state){
+            // Change the classes in the
+            var as=["hourly", "daily", "weekly", "monthly", "yearly"];
+            var ws="#"selector+"_"+state;
+            $.each( as, function( index, value ){
+                value = "#"+value;
+                $(value).removeClass("active");
+                if (value == ws){
+                    $(value).addClass("active");
+                }
+            });
+        }
 
 
         </script>
@@ -59,11 +71,11 @@
     <div class="col-md-6">{{ graph.name }}</div>
     <div class="col-md-6">
         <ul id="{{ graph.graph_id }}_nav" class="nav nav-tabs">
-            <li class="active"><a href="#{{ graph.graph_id }}_hourly_container">Hour</a></li>
-            <li><a href="#{{ graph.graph_id }}_daily_container">Day</a></li>
-            <li><a href="#{{ graph.graph_id }}_weekly_container">Week</a></li>
-            <li><a href="#{{ graph.graph_id }}_monthly_container">Month</a></li>
-            <li><a href="#{{ graph.graph_id }}_yearly_container">Year</a></li>
+            <li class="active"><a onClick='set_active_chart("#{{ graph.graph_id }}", "hourly"); return false;' id="#{{ graph.graph_id }}_hourly">Hour</a></li>
+            <li><a onClick='set_active_chart("#{{ graph.graph_id }}", "daily"); return false;' id="#{{ graph.graph_id }}_daily">Day</a></li>
+            <li><a onClick='set_active_chart("#{{ graph.graph_id }}", "weekly"); return false;' id="#{{ graph.graph_id }}_weekly">Week</a></li>
+            <li><a onClick='set_active_chart("#{{ graph.graph_id }}", "monthly"); return false;' id="#{{ graph.graph_id }}_monthly">Month</a></li>
+            <li><a onClick='set_active_chart("#{{ graph.graph_id }}", "yearly"); return false;' id="#{{ graph.graph_id }}_yearly">Year</a></li>
         </ul>
         <div id="{{graph.graph_id}}">
             <svg height="300px"></svg>
