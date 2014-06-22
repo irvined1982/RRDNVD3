@@ -103,7 +103,8 @@ def list_graphs(request):
                     info['relative_path'] = info['relative_path'][len(GRAPH_PATH):]
                 info['hourly_rrd_url'] = reverse('get_graph', args=[-60*60, 0, info['relative_path']])
                 info['daily_rrd_url'] = reverse('get_graph', args=[-60*60*24, 0, info['relative_path']])
-                info['weekly_rrd_url'] = reverse('get_graph', args=[-60*60*24*31, 0, info['relative_path']])
+                info['weekly_rrd_url'] = reverse('get_graph', args=[-60*60*24*7, 0, info['relative_path']])
+                info['monthly_rrd_url'] = reverse('get_graph', args=[-60*60*24*31, 0, info['relative_path']])
                 info['yearly_rrd_url'] = reverse('get_graph', args=[-60*60*24*31*265, 0, info['relative_path']])
 
                 info['name'] = info['relative_path'][:-4]

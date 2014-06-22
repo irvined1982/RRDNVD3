@@ -14,6 +14,28 @@
         	        }, 30000);
 	            });
             }
+            function add_standard_chart(tickformat, url, selector){
+                nv.addGraph(function() {
+                    var chart = nv.models.stackedAreaChart()
+                    .x(function(d) { return d[0] })
+                    .y(function(d) { return d[1] })
+                    .clipEdge(true)
+                    .useInteractiveGuideline(true)
+                    ;
+
+                    chart.xAxis
+                    .showMaxMin(false)
+                    .tickFormat(function(d) { return d3.time.format(tickformat)(new Date(d)) });
+
+                    chart.yAxis
+                        .tickFormat(d3.format(',.2f'));
+
+                    nv.utils.windowResize(chart.update);
+
+                    update_chart(chart, selector, url);
+                });
+            }
+
         </script>
 {% for graph in graphs %}
 
@@ -21,34 +43,54 @@
 <div class="row">
     <div class="col-md-6">{{ graph.name }}</div>
     <div class="col-md-6">
-        <div id="{{graph.graph_id}}_hourly">
-            <svg height="300px"></svg>
+        <ul id="graph_{{ graph.graph_id }}_nav" class="nav nav-pills">
+            <li class="active"><a href="#graph_{{ graph.graph_id }}_hourly_container">Hour</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_daily_container">Day</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_weekly_container">Week</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_monthly_container">Month</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_yearly_container">Year</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="graph_{{ graph.graph_id }}_hourly_container">
+                <div id="{{graph.graph_id}}_hourly">
+                    <svg height="300px"></svg>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_daily_container">
+                <div id="{{graph.graph_id}}_daily">
+                    <svg height="300px"></svg>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_weekly_container">
+                <div id="{{graph.graph_id}}_weekly">
+                    <svg height="300px"></svg>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_monthly_container">
+                <div id="{{graph.graph_id}}_monthly">
+                    <svg height="300px"></svg>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_yearly_container">
+                <div id="{{graph.graph_id}}_yearly">
+                    <svg height="300px"></svg>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
 <script>
-    nv.addGraph(function() {
-        var chart = nv.models.stackedAreaChart()
-            .x(function(d) { return d[0] })
-            .y(function(d) { return d[1] })
-            .clipEdge(true)
-            .useInteractiveGuideline(true)
-            ;
-
-        chart.xAxis
-            .showMaxMin(false)
-            .tickFormat(function(d) { return d3.time.format('%X')(new Date(d)) });
-
-        chart.yAxis
-            .tickFormat(d3.format(',.2f'));
-
-        nv.utils.windowResize(chart.update);
-
-        update_chart(chart, "#{{graph.graph_id}}_hourly svg", "{{ graph.hourly_rrd_url }}" );
-
-    });
+    add_standard_chart("%X", "{{ graph.hourly_rrd_url }}", "#{{graph.graph_id}}_hourly svg");
+    add_standard_chart("%X", "{{ graph.daily_rrd_url }}", "#{{graph.graph_id}}_daily svg");
+    add_standard_chart("%x %X", "{{ graph.weekly_rrd_url }}", "#{{graph.graph_id}}_weekly svg");
+    add_standard_chart("%x", "{{ graph.monthly_rrd_url }}", "#{{graph.graph_id}}_monthly svg");
+    add_standard_chart("%x", "{{ graph.yearly_rrd_url }}", "#{{graph.graph_id}}_yearly svg");
+    jQuery('#graph_{{ graph.graph_id }}_nav a').click(function (e) {
+        jQuery(window).trigger('resize');
+    }
+    
 </script>
 
 
