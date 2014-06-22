@@ -54,11 +54,11 @@
             var as=["hourly", "daily", "weekly", "monthly", "yearly"];
             var ws="#"+selector+"_"+state;
             $.each( as, function( index, value ){
-                value = "#"+selector+"_"+value;
-                $(value).removeClass("active");
-                if (value.valueOf() == ws.valueOf()){
-                    $(value).addClass("active");
-                }
+                var v = "#"+selector+"_"+value;
+                $(v).removeClass("active");
+             //   if (v.valueOf() == ws.valueOf()){
+             //       $(v).addClass("active");
+             //   }
             });
             // Set the attributes for the active graph
             var g=graphs[selector];
