@@ -11,9 +11,9 @@
                     for (selector in graphs){
                         var g=graphs[selector];
                         var u = g['active']['url'];
-
+                        var s = "#"+selector +" svg";
                         if (u.valueOf() == url.valueOf()){
-                            d3.select("#"+selector +" svg")
+                            d3.select(s)
 	                        .datum(data)
         	                .transition().duration(500);
                         }
