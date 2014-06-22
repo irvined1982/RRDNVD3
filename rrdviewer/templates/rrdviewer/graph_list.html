@@ -56,7 +56,7 @@
             $.each( as, function( index, value ){
                 value = "#"+selector+"_"+value;
                 $(value).removeClass("active");
-                if (value == ws){
+                if (value.valueOf() == ws.valueOf()){
                     $(value).addClass("active");
                 }
             });
