@@ -12,11 +12,12 @@
                         var g=graphs[selector];
                         var u = g['active']['url'];
                         var s = "#"+selector +" svg";
+                        var c = g['active']['chart']
                         if (u.valueOf() == url.valueOf()){
                             d3.select(s)
 	                        .datum(data)
         	                .transition().duration(500)
-        	                .call(g['active']['chart']);
+        	                .call(c);
                         }
                     }
         	    }).always(function() {
@@ -85,14 +86,14 @@
     graph_data["{{ graph.weekly_rrd_url }}"]=[]
     graph_data["{{ graph.monthly_rrd_url }}"]=[]
     graph_data["{{ graph.yearly_rrd_url }}"]=[]
-
+    add_standard_chart("{{ graph.graph_id }}");
     update_url("{{ graph.hourly_rrd_url }}");
     update_url("{{ graph.daily_rrd_url }}");
     update_url("{{ graph.weekly_rrd_url }}");
     update_url("{{ graph.monthly_rrd_url }}");
     update_url("{{ graph.yearly_rrd_url }}");
 
-    add_standard_chart("graph_{{ graph.graph_id }}");
+
 
 
 </script>
