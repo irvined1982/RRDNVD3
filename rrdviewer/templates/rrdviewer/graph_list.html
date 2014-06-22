@@ -1,20 +1,28 @@
 {% extends "rrdviewer/base.html" %}
 {% block content %}
         <script>
-            function update_chart(chart, selector, url){
+            var graph_data={};
+            var graphs={};
+            
+            function update_url(url){
                 var jqxhr = $.getJSON( url, function(data) {
-                    d3.select(selector)
-	                .datum(data)
-        	        .transition().duration(500)
-	                .call(chart).style({ 'width': 400, 'height': 200 });
-
-        	    }).always(function() {
+                    // Update each chart that uses this url
+                    graph_data[url]=data;
+                    for (selector in graphs){
+                        if (graphs[selector]['active']['url'] == url){
+                            d3.select(selector)
+	                        .datum(data)
+        	                .transition().duration(500);
+                        }
+                    }
+        	    }).update_url(function() {
 	                setTimeout(function(){
-	                    update_chart(chart, selector, url);
+	                    update_url(chart, selector, url);
         	        }, 30000);
 	            });
             }
-            function add_standard_chart(tickformat, url, selector){
+
+            function add_standard_chart(selector){
                 nv.addGraph(function() {
                     var chart = nv.models.stackedAreaChart()
                     .x(function(d) { return d[0] })
@@ -25,16 +33,17 @@
 
                     chart.xAxis
                     .showMaxMin(false)
-                    .tickFormat(function(d) { return d3.time.format(tickformat)(new Date(d)) });
+                    .tickFormat(function(d) { return d3.time.format(graphs[selector]['active']['tickformat'])(new Date(d)) });
 
                     chart.yAxis
                         .tickFormat(d3.format(',.2f'));
 
                     nv.utils.windowResize(chart.update);
 
-                    update_chart(chart, selector, url);
                 });
             }
+
+
 
         </script>
 {% for graph in graphs %}
@@ -44,55 +53,42 @@
     <div class="col-md-6">{{ graph.name }}</div>
     <div class="col-md-6">
         <ul id="graph_{{ graph.graph_id }}_nav" class="nav nav-tabs">
-            <li class="active"><a href="#graph_{{ graph.graph_id }}_hourly_container" data-toggle="tab">Hour</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_daily_container" data-toggle="tab">Day</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_weekly_container" data-toggle="tab">Week</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_monthly_container" data-toggle="tab">Month</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_yearly_container" data-toggle="tab">Year</a></li>
+            <li class="active"><a href="#graph_{{ graph.graph_id }}_hourly_container">Hour</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_daily_container">Day</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_weekly_container">Week</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_monthly_container">Month</a></li>
+            <li><a href="#graph_{{ graph.graph_id }}_yearly_container">Year</a></li>
         </ul>
-        <div class="tab-content">
-            foo
-            <div class="tab-pane fade in active" id="graph_{{ graph.graph_id }}_hourly_container">
-                <div id="{{graph.graph_id}}_hourly">
-                    <svg height="300px"></svg>
-                </div>
-            </div>
-            bar
-
-            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_daily_container">
-                <div id="{{graph.graph_id}}_daily">
-                    <svg height="300px"></svg>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_weekly_container">
-                <div id="{{graph.graph_id}}_weekly">
-                    <svg height="300px"></svg>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_monthly_container">
-                <div id="{{graph.graph_id}}_monthly">
-                    <svg height="300px"></svg>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_yearly_container">
-                <div id="{{graph.graph_id}}_yearly">
-                    <svg height="300px"></svg>
-                </div>
-            </div>
+        <div id="{{graph.graph_id}}">
+            <svg height="300px"></svg>
+        </div>
         </div>
     </div>
 </div>
 
 
 <script>
-    add_standard_chart("%X", "{{ graph.hourly_rrd_url }}", "#{{graph.graph_id}}_hourly svg");
-    add_standard_chart("%X", "{{ graph.daily_rrd_url }}", "#{{graph.graph_id}}_daily svg");
-    add_standard_chart("%x %X", "{{ graph.weekly_rrd_url }}", "#{{graph.graph_id}}_weekly svg");
-    add_standard_chart("%x", "{{ graph.monthly_rrd_url }}", "#{{graph.graph_id}}_monthly svg");
-    add_standard_chart("%x", "{{ graph.yearly_rrd_url }}", "#{{graph.graph_id}}_yearly svg");
-    jQuery('#graph_{{ graph.graph_id }}_nav a').click(function (e) {
-        jQuery(window).trigger('resize');
-    });
+    graphs["graph_{{graph.graph_id}}"]={};
+    graphs["graph_{{graph.graph_id}}"]['active']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+    graphs["graph_{{graph.graph_id}}"]['hourly']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+    graphs["graph_{{graph.graph_id}}"]['daily']={ "url":"{{ graph.daily_rrd_url }}", "tickformat":"%X"};
+    graphs["graph_{{graph.graph_id}}"]['weekly']={ "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
+    graphs["graph_{{graph.graph_id}}"]['monthly']={ "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
+    graphs["graph_{{graph.graph_id}}"]['yearly']={ "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
+    graph_data[{{ graph.hourly_rrd_url }}]=[]
+    graph_data[{{ graph.daily_rrd_url }}]=[]
+    graph_data[{{ graph.weekly_rrd_url }}]=[]
+    graph_data[{{ graph.monthly_rrd_url }}]=[]
+    graph_data[{{ graph.yearly_rrd_url }}]=[]
+
+    update_url({{ graph.hourly_rrd_url }});
+    update_url({{ graph.daily_rrd_url }});
+    update_url({{ graph.weekly_rrd_url }});
+    update_url({{ graph.monthly_rrd_url }});
+    update_url({{ graph.yearly_rrd_url }});
+
+    add_standard_chart("graph_{{ graph.graph_id }}");
+
 
 </script>
 
