@@ -10,7 +10,7 @@
                     graph_data[url]=data;
                     for (selector in graphs){
                         if (graphs[selector]['active']['url'] == url){
-                            d3.select(selector)
+                            d3.select("#"+selector +" svg")
 	                        .datum(data)
         	                .transition().duration(500);
                         }
