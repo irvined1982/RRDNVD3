@@ -43,7 +43,7 @@
 <div class="row">
     <div class="col-md-6">{{ graph.name }}</div>
     <div class="col-md-6">
-        <ul id="graph_{{ graph.graph_id }}_nav" class="nav nav-pills">
+        <ul id="graph_{{ graph.graph_id }}_nav" class="nav nav-tabss">
             <li class="active"><a href="#graph_{{ graph.graph_id }}_hourly_container">Hour</a></li>
             <li><a href="#graph_{{ graph.graph_id }}_daily_container">Day</a></li>
             <li><a href="#graph_{{ graph.graph_id }}_weekly_container">Week</a></li>
@@ -58,7 +58,7 @@
                 </div>
             </div>
             bar
-            
+
             <div class="tab-pane fade" id="graph_{{ graph.graph_id }}_daily_container">
                 <div id="{{graph.graph_id}}_daily">
                     <svg height="300px"></svg>
