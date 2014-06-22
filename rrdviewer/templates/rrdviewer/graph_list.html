@@ -60,6 +60,19 @@
                     $(value).addClass("active");
                 }
             });
+            // Set the attributes for the active graph
+            var g=graphs[selector];
+            g['active']['url']=g[state]['url'];
+            g['active']['tickformat']=g[state]['tickformat'];
+            var c = g['active']['chart'];
+            // Set the tickformat on the chart.
+            chart.xAxis.tickFormat(function(d) { return d3.time.format(g['active']['tickformat'])(new Date(d)) });
+            var data=graph_data[url];
+            // Set the data on the chart.
+            d3.select("#"+selector+ " svg")
+                .datum(data)
+                .transition().duration(500)
+        	    .call(c);
         }
 
 
