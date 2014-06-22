@@ -15,7 +15,8 @@
                         if (u.valueOf() == url.valueOf()){
                             d3.select(s)
 	                        .datum(data)
-        	                .transition().duration(500);
+        	                .transition().duration(500)
+        	                .call(g['active']['chart']);
                         }
                     }
         	    }).always(function() {
@@ -42,6 +43,7 @@
                         .tickFormat(d3.format(',.2f'));
 
                     nv.utils.windowResize(chart.update);
+                    graphs[selector]['active']['chart']=chart;
 
                 });
             }
