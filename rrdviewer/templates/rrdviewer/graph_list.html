@@ -39,7 +39,7 @@
 
         chart.xAxis
             .showMaxMin(false)
-            .tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+            .tickFormat(function(d) { return d3.time.format('%X')(new Date(d)) });
 
         chart.yAxis
             .tickFormat(d3.format(',.2f'));
