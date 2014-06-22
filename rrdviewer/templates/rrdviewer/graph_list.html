@@ -55,12 +55,12 @@
 <div class="row">
     <div class="col-md-6">{{ graph.name }}</div>
     <div class="col-md-6">
-        <ul id="graph_{{ graph.graph_id }}_nav" class="nav nav-tabs">
-            <li class="active"><a href="#graph_{{ graph.graph_id }}_hourly_container">Hour</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_daily_container">Day</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_weekly_container">Week</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_monthly_container">Month</a></li>
-            <li><a href="#graph_{{ graph.graph_id }}_yearly_container">Year</a></li>
+        <ul id="{{ graph.graph_id }}_nav" class="nav nav-tabs">
+            <li class="active"><a href="#{{ graph.graph_id }}_hourly_container">Hour</a></li>
+            <li><a href="#{{ graph.graph_id }}_daily_container">Day</a></li>
+            <li><a href="#{{ graph.graph_id }}_weekly_container">Week</a></li>
+            <li><a href="#{{ graph.graph_id }}_monthly_container">Month</a></li>
+            <li><a href="#{{ graph.graph_id }}_yearly_container">Year</a></li>
         </ul>
         <div id="{{graph.graph_id}}">
             <svg height="300px"></svg>
@@ -71,13 +71,13 @@
 
 
 <script>
-    graphs["graph_{{graph.graph_id}}"]={};
-    graphs["graph_{{graph.graph_id}}"]['active']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
-    graphs["graph_{{graph.graph_id}}"]['hourly']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
-    graphs["graph_{{graph.graph_id}}"]['daily']={ "url":"{{ graph.daily_rrd_url }}", "tickformat":"%X"};
-    graphs["graph_{{graph.graph_id}}"]['weekly']={ "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
-    graphs["graph_{{graph.graph_id}}"]['monthly']={ "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
-    graphs["graph_{{graph.graph_id}}"]['yearly']={ "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
+    graphs["{{graph.graph_id}}"]={};
+    graphs["{{graph.graph_id}}"]['active']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+    graphs["{{graph.graph_id}}"]['hourly']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+    graphs["{{graph.graph_id}}"]['daily']={ "url":"{{ graph.daily_rrd_url }}", "tickformat":"%X"};
+    graphs["{{graph.graph_id}}"]['weekly']={ "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
+    graphs["{{graph.graph_id}}"]['monthly']={ "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
+    graphs["{{graph.graph_id}}"]['yearly']={ "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
     graph_data["{{ graph.hourly_rrd_url }}"]=[]
     graph_data["{{ graph.daily_rrd_url }}"]=[]
     graph_data["{{ graph.weekly_rrd_url }}"]=[]
