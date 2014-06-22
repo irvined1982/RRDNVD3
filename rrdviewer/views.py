@@ -101,7 +101,7 @@ def list_graphs(request):
                 info['graph_id'] = "graph_%s" % id
                 if info['relative_path'].startswith(GRAPH_PATH):
                     info['relative_path'] = info['relative_path'][len(GRAPH_PATH):]
-                info['rrd_url'] = reverse('get_graph', args=[0, 0, info['relative_path']])
+                info['rrd_url'] = reverse('get_graph', args=[-60, 0, info['relative_path']])
                 info['name'] = info['relative_path'][:-4]
                 for k, v in rrdtool.info(info['rrd_absolute_path']).iteritems():
                     components = k.split(".")
