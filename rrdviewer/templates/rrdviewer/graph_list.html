@@ -9,6 +9,9 @@
                     // Update each chart that uses this url
                     graph_data[url]=data;
                     for (selector in graphs){
+                        var g=graphs[selector];
+                        var u = graph['active']['url'];
+                        
                         if (graphs[selector]['active']['url'] == url){
                             d3.select("#"+selector +" svg")
 	                        .datum(data)
