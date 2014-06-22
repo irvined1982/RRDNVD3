@@ -67,7 +67,7 @@
             var c = g['active']['chart'];
             // Set the tickformat on the chart.
             c.xAxis.tickFormat(function(d) { return d3.time.format(g['active']['tickformat'])(new Date(d)) });
-            var data=graph_data[url];
+            var data=graph_data[g['active']['url']];
             // Set the data on the chart.
             d3.select("#"+selector+ " svg")
                 .datum(data)
