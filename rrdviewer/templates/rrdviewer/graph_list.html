@@ -21,7 +21,7 @@
 <div class="row">
     <div class="col-md-6">{{ graph.name }}</div>
     <div class="col-md-6">
-        <div id="{{graph.graph_id}}">
+        <div id="{{graph.graph_id}}_hourly">
             <svg height="300px"></svg>
         </div>
     </div>
@@ -46,7 +46,7 @@
 
         nv.utils.windowResize(chart.update);
 
-        update_chart(chart, "#{{graph.graph_id}} svg", "{{ graph.rrd_url }}" );
+        update_chart(chart, "#{{graph.graph_id}}_hourly svg", "{{ graph.hourly_rrd_url }}" );
 
     });
 </script>
