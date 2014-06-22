@@ -84,7 +84,7 @@
     <div class="col-md-6">{{ graph.name }}</div>
     <div class="col-md-6">
         <ul id="{{ graph.graph_id }}_nav" class="nav nav-tabs">
-            <li id="#{{ graph.graph_id }}_hourly" class="active"><a href="#" onClick='set_active_chart("#{{ graph.graph_id }}", "hourly"); return false;'>Hour</a></li>
+            <li id="#{{ graph.graph_id }}_hourly" class="active"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "hourly"); return false;'>Hour</a></li>
             <li id="#{{ graph.graph_id }}_daily"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "daily"); return false;'>Day</a></li>
             <li id="#{{ graph.graph_id }}_weekly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "weekly"); return false;'>Week</a></li>
             <li id="#{{ graph.graph_id }}_monthly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "monthly"); return false;'>Month</a></li>
