@@ -3,7 +3,7 @@
         <script>
             var graph_data={};
             var graphs={};
-            
+
             function update_url(url){
                 var jqxhr = $.getJSON( url, function(data) {
                     // Update each chart that uses this url
@@ -75,17 +75,17 @@
     graphs["graph_{{graph.graph_id}}"]['weekly']={ "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
     graphs["graph_{{graph.graph_id}}"]['monthly']={ "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
     graphs["graph_{{graph.graph_id}}"]['yearly']={ "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
-    graph_data[{{ graph.hourly_rrd_url }}]=[]
-    graph_data[{{ graph.daily_rrd_url }}]=[]
-    graph_data[{{ graph.weekly_rrd_url }}]=[]
-    graph_data[{{ graph.monthly_rrd_url }}]=[]
-    graph_data[{{ graph.yearly_rrd_url }}]=[]
+    graph_data["{{ graph.hourly_rrd_url }}"]=[]
+    graph_data["{{ graph.daily_rrd_url }}"]=[]
+    graph_data["{{ graph.weekly_rrd_url }}"]=[]
+    graph_data["{{ graph.monthly_rrd_url }}"]=[]
+    graph_data["{{ graph.yearly_rrd_url }}"]=[]
 
-    update_url({{ graph.hourly_rrd_url }});
-    update_url({{ graph.daily_rrd_url }});
-    update_url({{ graph.weekly_rrd_url }});
-    update_url({{ graph.monthly_rrd_url }});
-    update_url({{ graph.yearly_rrd_url }});
+    update_url("{{ graph.hourly_rrd_url }}");
+    update_url("{{ graph.daily_rrd_url }}");
+    update_url("{{ graph.weekly_rrd_url }}");
+    update_url("{{ graph.monthly_rrd_url }}");
+    update_url("{{ graph.yearly_rrd_url }}");
 
     add_standard_chart("graph_{{ graph.graph_id }}");
 
