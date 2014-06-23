@@ -89,8 +89,6 @@ def list_graphs(request):
         for file in files:
             if file.endswith(".rrd"):
                 id += 1
-                if id > 2:
-                    continue
                 info = {}
                 info_file = "%s.info" % file[0:-4]
                 info_file_path = (os.path.join(directory, info_file))
@@ -131,6 +129,7 @@ def list_graphs(request):
                             if tindex not in i[tkey]:
                                 i[tkey][tindex] = {}
                             i[tkey][tindex][components[2]] = v
+                print info
                 graphs.append(info)
     return render_to_response("rrdviewer/graph_list.html", {'graphs': graphs, },
                               context_instance=RequestContext(request))
