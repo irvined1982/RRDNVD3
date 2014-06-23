@@ -1,53 +1,68 @@
 {% extends "rrdviewer/base.html" %}
 {% block content %}
-        <script>
-            var graph_data={};
-            var graphs={};
+    <ul class="pager">
+        {% if graphs.has_previous %}
+            <li class="previous"><a href="?page={{ graphs.previous_page_number }}">&larr; Previous</a></li>
+        {% else %}
+            <li class="previous disabled"><a href="?page={{ graphs.previous_page_number }}">&larr; Previous</a></li>
+        {% endif %}
 
-            function update_url(url){
-                var jqxhr = $.getJSON( url, function(data) {
-                    // Update each chart that uses this url
-                    graph_data[url]=data;
-                    for (selector in graphs){
-                        var g=graphs[selector];
-                        var u = g['active']['url'];
-                        var s = "#"+selector +" svg";
-                        var c = g['active']['chart']
-                        if (u.valueOf() == url.valueOf()){
-                            d3.select(s)
-	                        .datum(data)
-        	                .transition().duration(500)
-        	                .call(c);
-                        }
+        {% if graphs.has_next %}
+            <li class="next"><a href="?page={{ graphs.next_page_number }}">&larr; Next</a></li>
+        {% else %}
+            <li class="next disabled"><a href="?page={{ graphs.next_page_number }}">&larr; Next</a></li>
+        {% endif %}
+   </ul>
+
+
+    <script>
+        var graph_data={};
+        var graphs={};
+
+        function update_url(url){
+            var jqxhr = $.getJSON( url, function(data) {
+                // Update each chart that uses this url
+                graph_data[url]=data;
+                for (selector in graphs){
+                    var g=graphs[selector];
+                    var u = g['active']['url'];
+                    var s = "#"+selector +" svg";
+                    var c = g['active']['chart']
+                    if (u.valueOf() == url.valueOf()){
+                        d3.select(s)
+                        .datum(data)
+                        .transition().duration(500)
+                        .call(c);
                     }
-        	    }).always(function() {
-	                setTimeout(function(){
-	                    update_url(url);
-        	        }, 30000);
-	            });
-            }
+                }
+            }).always(function() {
+                setTimeout(function(){
+                    update_url(url);
+                }, 30000);
+            });
+        }
 
-            function add_standard_chart(selector){
-                nv.addGraph(function() {
-                    var chart = nv.models.stackedAreaChart()
-                    .x(function(d) { return d[0] })
-                    .y(function(d) { return d[1] })
-                    .clipEdge(true)
-                    .useInteractiveGuideline(true)
-                    ;
+        function add_standard_chart(selector){
+            nv.addGraph(function() {
+                var chart = nv.models.stackedAreaChart()
+                .x(function(d) { return d[0] })
+                .y(function(d) { return d[1] })
+                .clipEdge(true)
+                .useInteractiveGuideline(true)
+                ;
 
-                    chart.xAxis
-                    .showMaxMin(false)
-                    .tickFormat(function(d) { return d3.time.format(graphs[selector]['active']['tickformat'])(new Date(d)) });
+                chart.xAxis
+                .showMaxMin(false)
+                .tickFormat(function(d) { return d3.time.format(graphs[selector]['active']['tickformat'])(new Date(d)) });
 
-                    chart.yAxis
-                        .tickFormat(d3.format(',.2f'));
+                chart.yAxis
+                    .tickFormat(d3.format(',.2f'));
 
-                    nv.utils.windowResize(chart.update);
-                    graphs[selector]['active']['chart']=chart;
+                nv.utils.windowResize(chart.update);
+                graphs[selector]['active']['chart']=chart;
 
-                });
-            }
+            });
+        }
 
         function set_active_chart(selector, state){
             // Change the classes in the
@@ -74,55 +89,62 @@
                 .transition().duration(500)
         	    .call(c);
         }
+    </script>
 
+    {% for graph in graphs %}
 
-        </script>
-{% for graph in graphs %}
-
-<h3>{{ graph.name }}</h3>
-<div class="row">
-    <div class="col-md-6">{{ graph.name }}</div>
-    <div class="col-md-6">
-        <ul id="{{ graph.graph_id }}_nav" class="nav nav-tabs">
-            <li id="#{{ graph.graph_id }}_hourly" class="active"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "hourly"); return false;'>Hour</a></li>
-            <li id="#{{ graph.graph_id }}_daily"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "daily"); return false;'>Day</a></li>
-            <li id="#{{ graph.graph_id }}_weekly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "weekly"); return false;'>Week</a></li>
-            <li id="#{{ graph.graph_id }}_monthly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "monthly"); return false;'>Month</a></li>
-            <li id="#{{ graph.graph_id }}_yearly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "yearly"); return false;'>Year</a></li>
-        </ul>
-        <div id="{{graph.graph_id}}">
-            <svg height="300px"></svg>
-        </div>
+    <h3>{{ graph.name }}</h3>
+    <div class="row">
+        <div class="col-md-6">{{ graph.name }}</div>
+        <div class="col-md-6">
+            <ul id="{{ graph.graph_id }}_nav" class="nav nav-tabs">
+                <li id="#{{ graph.graph_id }}_hourly" class="active"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "hourly"); return false;'>Hour</a></li>
+                <li id="#{{ graph.graph_id }}_daily"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "daily"); return false;'>Day</a></li>
+                <li id="#{{ graph.graph_id }}_weekly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "weekly"); return false;'>Week</a></li>
+                <li id="#{{ graph.graph_id }}_monthly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "monthly"); return false;'>Month</a></li>
+                <li id="#{{ graph.graph_id }}_yearly"><a href="#" onClick='set_active_chart("{{ graph.graph_id }}", "yearly"); return false;'>Year</a></li>
+            </ul>
+            <div id="{{graph.graph_id}}">
+                <svg height="300px"></svg>
+            </div>
+            </div>
         </div>
     </div>
-</div>
 
 
-<script>
-    graphs["{{graph.graph_id}}"]={};
-    graphs["{{graph.graph_id}}"]['active']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
-    graphs["{{graph.graph_id}}"]['hourly']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
-    graphs["{{graph.graph_id}}"]['daily']={ "url":"{{ graph.daily_rrd_url }}", "tickformat":"%X"};
-    graphs["{{graph.graph_id}}"]['weekly']={ "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
-    graphs["{{graph.graph_id}}"]['monthly']={ "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
-    graphs["{{graph.graph_id}}"]['yearly']={ "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
-    graph_data["{{ graph.hourly_rrd_url }}"]=[]
-    graph_data["{{ graph.daily_rrd_url }}"]=[]
-    graph_data["{{ graph.weekly_rrd_url }}"]=[]
-    graph_data["{{ graph.monthly_rrd_url }}"]=[]
-    graph_data["{{ graph.yearly_rrd_url }}"]=[]
-    add_standard_chart("{{ graph.graph_id }}");
-    update_url("{{ graph.hourly_rrd_url }}");
-    update_url("{{ graph.daily_rrd_url }}");
-    update_url("{{ graph.weekly_rrd_url }}");
-    update_url("{{ graph.monthly_rrd_url }}");
-    update_url("{{ graph.yearly_rrd_url }}");
+    <script>
+        graphs["{{graph.graph_id}}"]={};
+        graphs["{{graph.graph_id}}"]['active']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+        graphs["{{graph.graph_id}}"]['hourly']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+        graphs["{{graph.graph_id}}"]['daily']={ "url":"{{ graph.daily_rrd_url }}", "tickformat":"%X"};
+        graphs["{{graph.graph_id}}"]['weekly']={ "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
+        graphs["{{graph.graph_id}}"]['monthly']={ "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
+        graphs["{{graph.graph_id}}"]['yearly']={ "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
+        graph_data["{{ graph.hourly_rrd_url }}"]=[]
+        graph_data["{{ graph.daily_rrd_url }}"]=[]
+        graph_data["{{ graph.weekly_rrd_url }}"]=[]
+        graph_data["{{ graph.monthly_rrd_url }}"]=[]
+        graph_data["{{ graph.yearly_rrd_url }}"]=[]
+        add_standard_chart("{{ graph.graph_id }}");
+        update_url("{{ graph.hourly_rrd_url }}");
+        update_url("{{ graph.daily_rrd_url }}");
+        update_url("{{ graph.weekly_rrd_url }}");
+        update_url("{{ graph.monthly_rrd_url }}");
+        update_url("{{ graph.yearly_rrd_url }}");
+    </script>
+    
+    {% endfor %}
+    <ul class="pager">
+            {% if graphs.has_previous %}
+                <li class="previous"><a href="?page={{ graphs.previous_page_number }}">&larr; Previous</a></li>
+            {% else %}
+                <li class="previous disabled"><a href="?page={{ graphs.previous_page_number }}">&larr; Previous</a></li>
+            {% endif %}
 
-
-
-
-</script>
-
-
-{% endfor %}
+            {% if graphs.has_next %}
+                <li class="next"><a href="?page={{ graphs.next_page_number }}">&larr; Next</a></li>
+            {% else %}
+                <li class="next disabled"><a href="?page={{ graphs.next_page_number }}">&larr; Next</a></li>
+            {% endif %}
+       </ul>
 {% endblock %}
