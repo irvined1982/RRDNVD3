@@ -141,6 +141,7 @@
         update_url("{{ graph.weekly_rrd_url }}");
         update_url("{{ graph.monthly_rrd_url }}");
         update_url("{{ graph.yearly_rrd_url }}");
+        update_graph_info("{{ graph.graph_id }}");
     </script>
 
     {% endfor %}
