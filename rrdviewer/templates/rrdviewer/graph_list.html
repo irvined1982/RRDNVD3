@@ -89,6 +89,17 @@
                 .transition().duration(500)
         	    .call(c);
         }
+        function update_graph_info(selector){
+            var url = graphs['selector']['active']['info_url']'
+
+            var jqxhr = $.getJSON( url, function(data) {
+
+            }).always(function() {
+                setTimeout(function(){
+                    update_url(url);
+                }, 30000);
+            });
+        }
     </script>
 
     {% for graph in graphs %}
@@ -113,12 +124,12 @@
 
     <script>
         graphs["{{graph.graph_id}}"]={};
-        graphs["{{graph.graph_id}}"]['active']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
-        graphs["{{graph.graph_id}}"]['hourly']={ "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
-        graphs["{{graph.graph_id}}"]['daily']={ "url":"{{ graph.daily_rrd_url }}", "tickformat":"%X"};
-        graphs["{{graph.graph_id}}"]['weekly']={ "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
-        graphs["{{graph.graph_id}}"]['monthly']={ "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
-        graphs["{{graph.graph_id}}"]['yearly']={ "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
+        graphs["{{graph.graph_id}}"]['active']={ "info_url": "{{ graph.info_url }}", "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+        graphs["{{graph.graph_id}}"]['hourly']={ "info_url": "{{ graph.info_url }}", "url":"{{ graph.hourly_rrd_url }}", "tickformat":"%X"};
+        graphs["{{graph.graph_id}}"]['daily']={ "info_url": "{{ graph.info_url }}", "url":"{{ graph.daily_rrd_url }}", "tickformat":"%X"};
+        graphs["{{graph.graph_id}}"]['weekly']={ "info_url": "{{ graph.info_url }}", "url":"{{ graph.weekly_rrd_url }}", "tickformat":"%%x X"};
+        graphs["{{graph.graph_id}}"]['monthly']={ "info_url": "{{ graph.info_url }}", "url":"{{ graph.monthly_rrd_url }}", "tickformat":"%x"};
+        graphs["{{graph.graph_id}}"]['yearly']={ "info_url": "{{ graph.info_url }}", "url":"{{ graph.yearly_rrd_url }}", "tickformat":"%x"};
         graph_data["{{ graph.hourly_rrd_url }}"]=[]
         graph_data["{{ graph.daily_rrd_url }}"]=[]
         graph_data["{{ graph.weekly_rrd_url }}"]=[]
