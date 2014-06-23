@@ -55,10 +55,10 @@
             var ws="#"+selector+"_"+state;
             $.each( as, function( index, value ){
                 var v = "#"+selector+"_"+value;
-                $(v).removeClass("active");
-             //   if (v.valueOf() == ws.valueOf()){
-             //       $(v).addClass("active");
-             //   }
+                document.getElementById(v).className ="";
+            if (v.valueOf() === ws.valueOf()){
+                    document.getElementById(v).className ="active";
+            }
             });
             // Set the attributes for the active graph
             var g=graphs[selector];
