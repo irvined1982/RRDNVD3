@@ -90,7 +90,7 @@
         	    .call(c);
         }
         function update_graph_info(selector){
-            var url = graphs['selector']['active']['info_url'];
+            var url = graphs[selector]['active']['info_url'];
 
             var jqxhr = $.getJSON( url, function(data) {
 
