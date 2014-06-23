@@ -122,7 +122,11 @@ def get_graph_info_dict(path):
 
 
 def get_info(request, path):
+    path = path.lstrip("/")
+    path = path.split('/')
+
     filename = os.path.join(GRAPH_PATH, *path)
+    
     if not os.path.exists(filename):
         raise Http404("RRD does not exist")
 
