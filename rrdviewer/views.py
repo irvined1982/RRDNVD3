@@ -95,7 +95,7 @@ def get_graph_info_dict(path):
 
     info['name'] = info['relative_path'][:-4]
 
-    
+
     for k, v in rrdtool.info(str(info['rrd_absolute_path'])).iteritems():
         components = k.split(".")
         if len(components) == 1:
@@ -131,7 +131,7 @@ def get_info(request, path):
     if not os.path.exists(filename):
         raise Http404("RRD does not exist")
 
-    return HttpResponse(json.dumps(get_graph_info_dict(filename)), content_type="application/json")
+    return HttpResponse(json.dumps(get_graph_info_dict(filename), indent=3, ), content_type="application/json")
 
 
 def show_rrd(request, path):
