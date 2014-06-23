@@ -93,7 +93,16 @@
             var url = graphs[selector]['active']['info_url'];
 
             var jqxhr = $.getJSON( url, function(data) {
-
+                var h="";
+                h += '<dl class="horizontal">';
+                h += '<dt>Name</dt><dd>' + data['name'] + '</dd>';
+                if (data.hasOwnProperty('description')){
+                    h += '<dt>Description</dt><dd>' + data['description'] + '</dd>';
+                }
+                h += '<dt>Created</dt><dd>' + new Date(data['created']) + '</dd>';
+                h += '<dt>Last Updated</dt><dd>' + new Date(data['last_update']) + '</dd>';
+                h += '</dl>';
+                document.getElementById("#"+selector+"_info").html(h);
             }).always(function() {
                 setTimeout(function(){
                     update_url(url);
