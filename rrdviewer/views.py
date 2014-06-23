@@ -119,6 +119,8 @@ def get_graph_info_dict(path):
                 if tindex not in i[tkey]:
                     i[tkey][tindex] = {}
                 i[tkey][tindex][components[2]] = v
+    info['created'] = int(info['created'])*1000
+    info['last_update'] = int(info['last_update'])*1000
     return info
 
 
