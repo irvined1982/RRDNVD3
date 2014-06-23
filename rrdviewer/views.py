@@ -19,6 +19,7 @@
 import json
 import os
 import rrdtool
+from django.conf import settings
 from django.http import Http404
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
@@ -27,7 +28,7 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-GRAPH_PATH = '/tmp'
+GRAPH_PATH = settings.GRAPH_PATH
 
 
 def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
