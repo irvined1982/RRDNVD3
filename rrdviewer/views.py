@@ -75,8 +75,9 @@ def get_graph(request, start_time, end_time, path, CF="AVERAGE"):
 
 
 def get_info(request, path):
-    pass
-
+    filename = os.path.join(GRAPH_PATH, *path)
+    if not os.path.exists(filename):
+        raise Http404("RRD does not exist")
 
 def show_rrd(request, path):
     pass
@@ -89,6 +90,8 @@ def list_graphs(request):
         for file in files:
             if file.endswith(".rrd"):
                 id += 1
+                if id > 10:
+                    continue
                 info = {}
                 info_file = "%s.info" % file[0:-4]
                 info_file_path = (os.path.join(directory, info_file))
@@ -104,6 +107,7 @@ def list_graphs(request):
                 info['weekly_rrd_url'] = reverse('get_graph', args=[-60*60*24*7, 0, info['relative_path']])
                 info['monthly_rrd_url'] = reverse('get_graph', args=[-60*60*24*31, 0, info['relative_path']])
                 info['yearly_rrd_url'] = reverse('get_graph', args=[-60*60*24*31*265, 0, info['relative_path']])
+                info['info_url'] = reverse('get_info',args=[info['relative_path']])
 
                 info['name'] = info['relative_path'][:-4]
                 for k, v in rrdtool.info(info['rrd_absolute_path']).iteritems():
