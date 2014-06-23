@@ -95,8 +95,8 @@ def get_graph_info_dict(path):
 
     info['name'] = info['relative_path'][:-4]
 
-    print info['rrd_absolute_path']
-    for k, v in rrdtool.info(info['rrd_absolute_path']).iteritems():
+    
+    for k, v in rrdtool.info(str(info['rrd_absolute_path'])).iteritems():
         components = k.split(".")
         if len(components) == 1:
             info[components[0]] = v
