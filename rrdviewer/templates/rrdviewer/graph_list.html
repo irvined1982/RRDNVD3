@@ -102,7 +102,7 @@
                 h += '<dt>Created</dt><dd>' + new Date(data['created']) + '</dd>';
                 h += '<dt>Last Updated</dt><dd>' + new Date(data['last_update']) + '</dd>';
                 h += '</dl>';
-                document.getElementById(selector+"_info").innerHtml(h);
+                document.getElementById(selector+"_info").innerHTML(h);
             }).always(function() {
                 setTimeout(function(){
                     update_url(url);
