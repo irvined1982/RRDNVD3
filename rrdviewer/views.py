@@ -140,8 +140,6 @@ def list_graphs(request):
         for file in files:
             if file.endswith(".rrd"):
                 id += 1
-                if id > 10:
-                    continue
                 f=os.path.join(directory,file)
                 info = get_graph_info_dict(f)
                 info['graph_id'] = "graph_%s" % id
